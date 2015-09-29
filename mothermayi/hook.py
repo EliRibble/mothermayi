@@ -19,7 +19,7 @@ def find_git_repo():
     raise NoRepoFoundError("Could not find a git repository (.git) in {}".format(os.path.abspath('.')))
 
 HOOK_CONTENT = """
-mothermayi run
+mothermayi pre-commit
 """
 
 def write_hook(pre_commit):
