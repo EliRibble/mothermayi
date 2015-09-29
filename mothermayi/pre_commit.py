@@ -1,11 +1,12 @@
 import mothermayi.entryway
 import mothermayi.git
 
-def handle_plugins(entries):
+def handle_plugins(config, entries, staged):
     for entry in entries:
-        result = entry()
+        result = entry(config, staged)
 
-def run():
+def run(config):
     with mothermayi.git.stash():
+        staged = mothermayi.git.get_staged()
         entries = mothermayi.entryway.get_entries('pre-commit')
-        handle_plugins(entries)
+        handle_plugins(config, entries, staged)

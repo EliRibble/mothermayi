@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import logging
+import mothermayi.config
 import mothermayi.hook
 import mothermayi.pre_commit
 
@@ -25,13 +26,14 @@ def main():
     else:
         logging.getLogger().setLevel(logging.WARNING)
 
-    args.func(args)
+    config = mothermayi.config.parse()
+    args.func(args, config)
 
-def install(args):
-    mothermayi.hook.install()
+def install(args, config):
+    mothermayi.hook.install(config)
 
-def pre_commit(args):
-    mothermayi.pre_commit.run()
+def pre_commit(args, config):
+    mothermayi.pre_commit.run(config)
 
 if __name__ == '__main__':
     main()
