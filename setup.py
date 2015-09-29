@@ -103,10 +103,6 @@ def main():
         ],
         extras_require={
             'develop': [
-                'coverage==3.7.1',
-                'pylint==1.4.3',
-                'pytest-cov==1.8.1',
-                'pytest-mock==0.7.0',
                 'pytest==2.7.3',
             ]
         },
