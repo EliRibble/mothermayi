@@ -6,6 +6,9 @@ LOGGER = logging.getLogger(__name__)
 class NoRepoFoundError(Exception):
     pass
 
+class PreCommitExists(Exception):
+    pass
+
 def find_git_repo():
     location = os.path.abspath('.')
     while location != '/':
@@ -15,6 +18,19 @@ def find_git_repo():
         location = os.path.dirname(location)
     raise NoRepoFoundError("Could not find a git repository (.git) in {}".format(os.path.abspath('.')))
 
+HOOK_CONTENT = """
+mothermayi run
+"""
+
+def write_hook(pre_commit):
+    with open(pre_commit, 'w') as f:
+        f.write(HOOK_CONTENT)
+
 def install():
     repo = find_git_repo()
     LOGGER.debug("Found git repo at %s", repo)
+    hooks = os.path.join(repo, 'hooks')
+    pre_commit = os.path.join(hooks, 'pre-commit')
+    if os.path.exists(pre_commit):
+        raise PreCommitExists("A git hook already exists at {}. Refusing to overwrite. Please remove it manually".format(pre_commit))
+    write_hook(pre_commit)
