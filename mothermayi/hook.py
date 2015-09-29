@@ -1,5 +1,6 @@
 import logging
 import os
+import stat
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,14 +24,22 @@ mothermayi pre-commit
 """
 
 def write_hook(pre_commit):
-    with open(pre_commit, 'w') as f:
-        f.write(HOOK_CONTENT)
+    if os.path.exists(pre_commit):
+        with open(pre_commit, 'r') as f:
+            if f.read() == HOOK_CONTENT:
+                LOGGER.debug("Not writing the hook - it's already set")
+            else:
+                raise PreCommitExists("A git hook already exists at {}. Refusing to overwrite. Please remove it manually".format(pre_commit))
+    else:
+        with open(pre_commit, 'w') as f:
+            f.write(HOOK_CONTENT)
+    original = os.stat(pre_commit)
+    os.chmod(pre_commit, original.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    LOGGER.debug("Set %s to executable", pre_commit)
 
 def install():
     repo = find_git_repo()
     LOGGER.debug("Found git repo at %s", repo)
     hooks = os.path.join(repo, 'hooks')
     pre_commit = os.path.join(hooks, 'pre-commit')
-    if os.path.exists(pre_commit):
-        raise PreCommitExists("A git hook already exists at {}. Refusing to overwrite. Please remove it manually".format(pre_commit))
     write_hook(pre_commit)
