@@ -2,6 +2,7 @@
 import argparse
 import logging
 import mothermayi.hook
+import mothermayi.pre_commit
 
 def main():
     logging.basicConfig()
@@ -13,11 +14,17 @@ def main():
     parser_install = subparsers.add_parser('install', help='Install the pre-commit hook logic')
     parser_install.set_defaults(func=install)
 
+    parser_run = subparsers.add_parser('pre-commit', help='Run the pre-commit hooks')
+    parser_run.set_defaults(func=pre_commit)
+
     args = parser.parse_args()
     args.func(args)
 
 def install(args):
     mothermayi.hook.install()
+
+def pre_commit(args):
+    mothermayi.pre_commit.run()
 
 if __name__ == '__main__':
     main()
