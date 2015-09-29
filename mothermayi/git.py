@@ -16,6 +16,8 @@ def execute(command):
 @contextlib.contextmanager
 def stash():
     execute(['git', 'stash', '-u', '--keep-index'])
-    yield
-    execute(['git', 'reset', '--hard'])
-    execute(['git', 'stash', 'pop', '--quiet', '--index'])
+    try:
+       yield
+    finally:
+        execute(['git', 'reset', '--hard'])
+        execute(['git', 'stash', 'pop', '--quiet', '--index'])
