@@ -117,7 +117,7 @@ def main():
         data_files           = get_data_files(),
         entry_points = {
         },
-        scripts = [],
+        scripts = ['bin/mothermayi'],
         include_package_data = True,
     )
 
