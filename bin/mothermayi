@@ -33,10 +33,10 @@ def main():
     sys.exit(args.func(args, config))
 
 def install(args, config):
-    mothermayi.hook.install(config)
+    return mothermayi.hook.install(config)
 
 def pre_commit(args, config):
-    mothermayi.pre_commit.run(config)
+    return mothermayi.pre_commit.run(config)
 
 if __name__ == '__main__':
     main()
