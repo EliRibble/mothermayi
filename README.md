@@ -25,7 +25,7 @@ You now have a pre-commit hook at `.git/hooks/pre-commit` which will be run any 
 pip install mothermayi-pylint
 ```
 
-This installs the `pylint` hook for `mothermayi`. You can get more information on pylint at it's website <insert>. Now if you perform a commit you'll see something like this:
+This installs the `pylint` hook for `mothermayi` (https://github.com/EliRibble/mothermayi). You can get more information on pylint at it's website at http://www.pylint.org/. Now if you perform a commit you'll see something like this:
 
 ```
 $ git commit
@@ -48,7 +48,7 @@ Configuration
 
 Configuration of `mothermayi` is pretty straightforward. Most plugins will work correctly out of the box. Some may take configuration parameters. Simply create a `.mothermayi` file in your repository. `mothermayi` will traverse the file system all the way back to the root looking for it. When it finds one it will import it as a YAML file and provide the config to all plugins. Plugins will take their own configuration parameters - check the documentation of the plugin you care about to see what configuration values it understands. In our example with `pylint` above you could have a configuration file like this:
 
-```
+```yaml
 pylint:
     args:
         - --reports=no
