@@ -37,7 +37,7 @@ def write_hook(pre_commit):
     os.chmod(pre_commit, original.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     LOGGER.debug("Set %s to executable", pre_commit)
 
-def install():
+def install(config):
     repo = find_git_repo()
     LOGGER.debug("Found git repo at %s", repo)
     hooks = os.path.join(repo, 'hooks')
