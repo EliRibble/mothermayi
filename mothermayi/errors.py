@@ -1,0 +1,3 @@
+class FailHook(Exception):
+    pass
+
