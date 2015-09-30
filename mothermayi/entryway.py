@@ -1,10 +1,17 @@
+import logging
 import pkg_resources
 
-def get_entries(name):
-    entries = []
+LOGGER = logging.getLogger(__name__)
+PLUGINS = {}
+def load():
     for entry in pkg_resources.iter_entry_points(group='mothermayi'):
-        if entry.name != name:
-            continue
         runner = entry.load()
-        entries.append(runner)
-    return entries
+        plugin = runner()
+        LOGGER.debug("Loaded plugin %s", plugin['name'])
+        if plugin['name'] in PLUGINS:
+            raise Exception("Already have a plugin with the name {}, cannot overwrite".format(plugin['name']))
+
+        PLUGINS[plugin['name']] = plugin
+
+def get_plugins(name):
+    return {k: v for k, v in PLUGINS.items() if name in v}

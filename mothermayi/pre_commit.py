@@ -8,5 +8,7 @@ def handle_plugins(config, entries, staged):
 def run(config):
     with mothermayi.git.stash():
         staged = mothermayi.git.get_staged()
-        entries = mothermayi.entryway.get_entries('pre-commit')
-        handle_plugins(config, entries, staged)
+        if not staged:
+            return
+        plugins = mothermayi.entryway.get_plugins('pre-commit')
+        handle_plugins(config, plugins, staged)

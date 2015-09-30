@@ -2,8 +2,10 @@
 import argparse
 import logging
 import mothermayi.config
+import mothermayi.entryway
 import mothermayi.hook
 import mothermayi.pre_commit
+import sys
 
 def main():
     logging.basicConfig()
@@ -27,7 +29,8 @@ def main():
         logging.getLogger().setLevel(logging.WARNING)
 
     config = mothermayi.config.parse()
-    args.func(args, config)
+    mothermayi.entryway.load()
+    sys.exit(args.func(args, config))
 
 def install(args, config):
     mothermayi.hook.install(config)
