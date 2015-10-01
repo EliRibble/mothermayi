@@ -105,6 +105,7 @@ def main():
         extras_require={
             'develop': [
                 'pytest==2.7.3',
+                'pytest-mock==0.8.1',
             ]
         },
         packages             = ["mothermayi"],
