@@ -33,7 +33,11 @@ def main():
     sys.exit(args.func(args, config))
 
 def install(args, config):
-    return mothermayi.hook.install(config)
+    try:
+        return mothermayi.hook.install(config)
+    except mothermayi.hook.PreCommitExists as e:
+        print(str(e))
+        return 1
 
 def pre_commit(args, config):
     return mothermayi.pre_commit.run(config)
