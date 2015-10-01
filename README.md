@@ -43,6 +43,15 @@ test.py:3: [W0301(unnecessary-semicolon), ] Unnecessary semicolon
 
 This tells you that the module `test.py` failed the pylint test. Cool!
 
+List of Known Plugins
+=====================
+
+If your plugin is not listed here please update the project via pull request or issue
+
+- https://github.com/EliRibble/mothermayi-example - The example plugin to help you get started writing your own
+- https://github.com/EliRibble/mothermayi-isort - A plugin for checking imports are sorted
+- https://github.com/EliRibble/mothermayi-pylint - A plugin for running pylint against your code
+
 Configuration
 =============
 
