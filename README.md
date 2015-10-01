@@ -57,6 +57,69 @@ pylint:
 
 This tells `pylint` to not generate reports and to use the config file at `pylint.cfg`. Well, more literally, it tells the plugin to add on the arguments `--reports=no --rcfile=pylint.cfg` when executing pylint.
 
+Creating a plugin
+=================
+
+The whole point of `mothermayi` is to make it easier to create plugins. You can check out an example plugin for yourself at https://github.com/EliRibble/mothermayi-example/ The fundamental elements of a plugin are as follows:
+
+# A setup file with a proper entry_point
+# A function that returns the plugin data
+# A function that can handle the hook
+
+The entry point
+---------------
+
+The entry point is how your plugin registers itself with `mothermayi`. You can read about them at http://pythonhosted.org/setuptools/pkg_resources.html#entry-points. In general it will look kind of like this:
+
+```python
+from setuptools import setup
+
+def main():
+    setup(
+        ...
+        entry_points = {
+            'mothermayi'    : [
+                'plugin = mmiexample.main:plugin',
+            ]
+        }
+        ...
+    )
+```
+
+That is, you'll pass in a parameter to `setup` called `entry_points`. It should be a dict with a key in it called `mothermayi`. This is how `mothermayi` will find your entry_point. From there you can call you entry point anything you like - I've called mine `plugin`. It references a module in a package, `mmiexample.main` and a particular function in that module, `plugin`. This function will be called when `mothermayi` loads in order to get information about the plugin.
+
+A function that returns the plugin data
+---------------------------------------
+
+Here's what my plugin function looks like:
+
+```python
+def plugin():
+    return {
+        'name'          : 'example',
+        'pre-commit'    : pre_commit,
+    }
+
+def pre_commit(config, staged):
+    ...
+```
+
+I'll get to the definition of `pre_commit` in a second. For now we'll focus on `plugin`. The `name` property that it returns is the name that will be displayed when `mothermayi` runs and should allow users to identify the plugin. If two plugins load with the same name from separate entry_points `mothermayi` will abort. So try to make it reasonably unique as well.
+
+Next the dict contains mappings of git hook types to functions that can handle those hooks. In this case I only have one, a `pre-commit` hook that will cause my function to be called. Each type of hook has a different function signature
+
+A function that can handle the hook
+-----------------------------------
+
+Right now `mothermayi` only supports `pre-commit` hooks. In the future it will support more. Each hook takes a different set of parameters. They all take a config, which will contain the configuration file that `mothermayi` loads as a `dict`. The `pre-commit` hook also takes in a list of files that will be committed (ie, files that are currently staged). This allows the hook to easily operate on those files without having to determine them itself.
+
+The hook function can do anything - analyze the files, change them, stage the new changes, etc. In order to signal that the hook should abort the commit it should raise `mothermayi.errors.FailHook`. Any message put into the constructor of the exception will be displayed to the user as the reason the hook failed. If the hook is successful it can return a string that will also be displayed to the user to provide status information. If you want to get fancy there's a `mothermayi.colors` module for coloring that output in a convenient way
+
+Deployment
+----------
+
+With that your hook is done. All you need to do is deploy it. I'd recommend PyPI (https://pypi.python.org/pypi) for that. The example plugin has a `setup.py` file that has enough data in it for you to use it to register your plugin with PyPI via `python setup.py register` and `python setup.py sdist upload`. If you let me know about your plugin via an issue in github or a pull-request we'll add it to the list of plugins
+
 Thanks
 ======
 MotherMayI is inspired by `pre-commit` at http://pre-commit.com. I liked the idea, but I didn't like the implementation and figured with a more Python-centric approach I could make it easier to work with. We'll see if I'm right. But thanks for the cool software hackers at Yelp!
