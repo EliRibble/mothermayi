@@ -7,9 +7,11 @@ def load():
     for entry in pkg_resources.iter_entry_points(group='mothermayi'):
         runner = entry.load()
         plugin = runner()
-        LOGGER.debug("Loaded plugin %s", plugin['name'])
-        if plugin['name'] in PLUGINS:
-            raise Exception("Already have a plugin with the name {}, cannot overwrite".format(plugin['name']))
+        plugin['dist'] = entry.dist
+        LOGGER.debug("Loaded plugin %s from %s", plugin['name'], entry.dist)
+        existing_plugin = PLUGINS.get(plugin['name'], None)
+        if existing_plugin and existing_plugin['dist'] != plugin['dist']:
+            LOGGER.warning("Overwriting plugin %s with %s", existing_plugin, plugin)
 
         PLUGINS[plugin['name']] = plugin
 
