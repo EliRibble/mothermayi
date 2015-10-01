@@ -62,9 +62,9 @@ Creating a plugin
 
 The whole point of `mothermayi` is to make it easier to create plugins. You can check out an example plugin for yourself at https://github.com/EliRibble/mothermayi-example/ The fundamental elements of a plugin are as follows:
 
-# A setup file with a proper entry_point
-# A function that returns the plugin data
-# A function that can handle the hook
+1. A setup file with a proper entry_point
+2. A function that returns the plugin data
+3. A function that can handle the hook
 
 The entry point
 ---------------
