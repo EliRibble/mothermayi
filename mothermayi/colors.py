@@ -11,3 +11,6 @@ def green(text):
 
 def red(text):
     return RED + text + ENDC
+
+def yellow(text):
+    return YELLOW + text + ENDC
