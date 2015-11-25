@@ -25,3 +25,22 @@ def get_staged():
         if match:
             staged.append(match.group('filename'))
     return staged
+
+COMMIT_PATTERN = re.compile((
+    r'commit (?P<commit>\w+)\n'
+    r'Author:\s+(?P<Author>.*)\n'
+    r'AuthorDate:\s+(?P<AuthorDate>.*)\n'
+    r'Commit:\s+(?P<Commit>.*)\n'
+    r'CommitDate:\s+(?P<CommitDate>.*)\n'
+    r'\s*\n'
+    r'\s*(?P<Title>.*)\n'
+    r'\s*(?P<Message>.*)'
+))
+def parse_commit(text):
+    match = COMMIT_PATTERN.match(text)
+    if match:
+        return match.groupdict()
+
+def get_latest_commit():
+    stdout, stderr = mothermayi.process.execute(['git', 'log', '-1', 'HEAD', '--format=fuller'])
+    return parse_commit(stdout.decode('utf-8'))

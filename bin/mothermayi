@@ -5,6 +5,7 @@ import mothermayi.config
 import mothermayi.entryway
 import mothermayi.hook
 import mothermayi.pre_commit
+import mothermayi.post_commit
 import sys
 
 def main():
@@ -18,8 +19,11 @@ def main():
     parser_install = subparsers.add_parser('install', help='Install the pre-commit hook logic')
     parser_install.set_defaults(func=install)
 
-    parser_run = subparsers.add_parser('pre-commit', help='Run the pre-commit hooks')
-    parser_run.set_defaults(func=pre_commit)
+    parser_pre_commit = subparsers.add_parser('pre-commit', help='Run the pre-commit hooks')
+    parser_pre_commit.set_defaults(func=pre_commit)
+
+    parser_post_commit = subparsers.add_parser('post-commit', help='Run the post-commit hoos')
+    parser_post_commit.set_defaults(func=post_commit)
 
     args = parser.parse_args()
 
@@ -41,6 +45,9 @@ def install(args, config):
 
 def pre_commit(args, config):
     return mothermayi.pre_commit.run(config)
+
+def post_commit(args, config):
+    return mothermayi.post_commit.run(config)
 
 if __name__ == '__main__':
     main()
