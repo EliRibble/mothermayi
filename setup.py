@@ -100,7 +100,7 @@ def main():
             'sdist'         : CustomSDistCommand,
         },
         install_requires    = [
-            'PyYAML==3.11',
+            'PyYAML==5.1',
         ],
         extras_require={
             'develop': [
