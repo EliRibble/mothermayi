@@ -1,6 +1,7 @@
 import contextlib
 import logging
 import re
+import subprocess
 import mothermayi.process
 
 LOGGER = logging.getLogger(__name__)
@@ -10,9 +11,14 @@ def stash():
     mothermayi.process.execute(['git', 'stash', '-u', '--keep-index'])
     try:
        yield
+    except Exception as e:
+        LOGGER.error("Failure: %s", e)
     finally:
         mothermayi.process.execute(['git', 'reset', '--hard'])
-        mothermayi.process.execute(['git', 'stash', 'pop', '--quiet', '--index'])
+        try:
+            mothermayi.process.execute(['git', 'stash', 'pop', '--quiet', '--index'])
+        except subprocess.CalledProcessError as e:
+            LOGGER.warning("Failed to restore stash: %s", e)
 
 
 IS_MODIFIED = re.compile(r'^[MA]\s+(?P<filename>.*)$')
